@@ -1,40 +1,40 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+public abstract class CharacterRoster {
+	private String name;
+    private int level;
+    private int health;
 
-/** Character collection ADT. Encapsulates storage and exposes safe roster operations. */
-public class CharacterRoster {
-    private final List<GameCharacter> characters = new ArrayList<>();
+    public void GameCharacter(String name, int level, int health) {
+        setName(name);
+        setLevel(level);
+        setHealth(health);
+    }
 
-    public void add(GameCharacter character) {
-        if (character == null) throw new IllegalArgumentException("Character is required.");
-        if (findByName(character.getName()) != null) throw new IllegalArgumentException("A character with this name already exists.");
-        characters.add(character);
+    public abstract String attack();
+    public abstract String specialMove();
+    public abstract String getType();
+
+    public String getName() { return name; }
+    public int getLevel() { return level; }
+    public int getHealth() { return health; }
+
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("Character name cannot be empty.");
+        this.name = name.trim();
     }
-    public List<GameCharacter> getAll() { return Collections.unmodifiableList(new ArrayList<>(characters)); }
-    public GameCharacter findByName(String name) {
-        if (name == null) return null;
-        for (GameCharacter c : characters) if (c.getName().equalsIgnoreCase(name.trim())) return c;
-        return null;
+    public void setLevel(int level) {
+        if (level < 1 || level > 100) throw new IllegalArgumentException("Level must be between 1 and 100.");
+        this.level = level;
     }
-    public GameCharacter findByIndex(int index) { return index >= 0 && index < characters.size() ? characters.get(index) : null; }
-    public int indexOfName(String name) {
-        if (name == null) return -1;
-        for (int i = 0; i < characters.size(); i++) if (characters.get(i).getName().equalsIgnoreCase(name.trim())) return i;
-        return -1;
+    public void setHealth(int health) {
+        if (health < 1 || health > 1000) throw new IllegalArgumentException("Health must be between 1 and 1000.");
+        this.health = health;
     }
-    public void update(int index, GameCharacter replacement) {
-        if (index < 0 || index >= characters.size()) throw new IllegalArgumentException("Select a character to update.");
-        if (replacement == null) throw new IllegalArgumentException("Character is required.");
-        for (int i = 0; i < characters.size(); i++) {
-            if (i != index && characters.get(i).getName().equalsIgnoreCase(replacement.getName()))
-                throw new IllegalArgumentException("Another character already uses this name.");
-        }
-        characters.set(index, replacement);
-    }
-    public void remove(int index) {
-        if (index < 0 || index >= characters.size()) throw new IllegalArgumentException("Select a character to remove.");
-        characters.remove(index);
-    }
-    public int size() { return characters.size(); }
+
+    @Override public String toString() { return name + " (" + getType() + ")"; }
+
+	protected abstract void add(Warrior warrior);
+
+	protected abstract int indexOfName(String name2);
+
+	protected abstract String size();
 }
