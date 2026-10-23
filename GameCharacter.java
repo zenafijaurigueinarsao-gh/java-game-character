@@ -32,3 +32,4 @@ public abstract class GameCharacter {
 
     @Override public String toString() { return name + " (" + getType() + ")"; }
 }
+
